@@ -1,0 +1,54 @@
+{
+  "name": "next-pathkit",
+  "version": "0.0.1",
+  "description": "Comprehensive toolkit for Next.js path management in static exports.",
+  "homepage": "https://github.com/hieupth/next-pathkit#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.mjs",
+      "require": "./dist/components/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs", 
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "bugs": {
+    "url": "https://github.com/hieupth/next-pathkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hieupth/next-pathkit.git"
+  },
+  "license": "AGPL-3.0",
+  "publishConfig": { "access": "public" },
+  "author": "Hieu Pham",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsdown",
+    "prepack": "tsdown",
+    "prepare": "tsdown"
+  },
+  "peerDependencies": {
+    "next": "^15.5.3",
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "next": "^15.5.3",
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0",
+    "@types/react": "^18.2.0 || ^19.0.0",
+    "@types/react-dom": "^18.2.0 || ^19.0.0",
+    "tsdown": "^0.22.14",
+    "typescript": "^5",
+    "@types/node": "^24"
+  }
+}

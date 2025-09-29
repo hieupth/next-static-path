@@ -1,127 +1,124 @@
-# next-pathkit
+# Next Static Path
 
-Comprehensive toolkit for Next.js path management in static exports. Provides components, hooks, and utilities to handle asset paths, navigation, and CSS URLs when hosting on sub-paths like **GitHub Pages**.
+[![License: AGPL v3 + Commercial](https://img.shields.io/badge/License-AGPL%20v3%20%2B%20Commercial-blue.svg)](#license)
+[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15%2B-black.svg)](https://nextjs.org/)
 
-## ✨ Features
+Next.js path management toolkit for static exports with i18n support. Handle basePath, locales, and assets for subdirectory hosting like GitHub Pages.
 
-### Components
-- **`<Image>`** → Auto-prefix basePath for image assets
-- **`<Link>`** → Enhanced navigation with basePath support
-- **`<Anchor>`** → Safe prefix for download links
-- **`<Bg>`** → Helper for inline background-image styles
-- **`<Script>`**, **`<Audio>`**, **`<Video>`**, **`<Iframe>`** → Media components with path handling
-- **`<Form>`** → Form action with basePath support
+## Features
 
-### Hooks
-- **`useAssetPath()`** → Advanced asset path management with utilities
-- **`useRouter()`** → Enhanced router with automatic basePath handling
-- **`usePathname()`** → Pathname hook for sub-path routing
-- **`useAsset()`**, **`useAssets()`** → Simple hooks for single/multiple assets
+- **Internationalization**: Client-side locale detection with SEO-friendly URLs
+- **Enhanced Components**: Drop-in replacements for Next.js Link, Image, Script, etc.
+- **Powerful Hooks**: useRouter, useLocale, usePathname with automatic basePath handling
+- **Path Utilities**: Automatic basePath and locale prefixing for all assets
 
-### Utilities
-- **Path utilities**: `getPrefixPath`, `getPrefixUrlObject`, `getBasePath`
-- **CSS utilities**: `processCss`, `css` template tag, `useProcessedCss`
-- **Asset detection**: External URL detection, conditional path handling
-
-## 🚀 Install
-
-Install directly from GitHub:
+## Installation
 
 ```bash
-npm install hieupth/next-pathkit#main
+npm install @hieupth/next-static-path
 ```
 
-## 🛠️ Usage
+## Setup
 
-### Component Examples
+### Environment
+
+```bash
+# .env.local
+NEXT_PUBLIC_BASE_PATH=/your-repo-name
+```
+
+
+## Usage
+
+### Navigation
+
 ```tsx
-import { Image, Link, Anchor, Bg, Script } from "next-pathkit/components";
+import { Link, useRouter } from "@hieupth/next-static-path";
 
-// Image with auto-prefixed src
-<Image src="/logo.svg" alt="Logo" width={180} height={38} />
+// Auto-prefixes with basePath and locale
+<Link href="/about">About</Link>
+<Link href={{ pathname: "/blog", query: { id: "1" } }}>Blog</Link>
 
-// Enhanced navigation
-<Link href="/dashboard">Dashboard</Link>
-
-// Download links
-<Anchor href="/files/report.pdf" download>Download Report</Anchor>
-
-// Background images
-<Bg bg="/images/hero.jpg" className="hero-section" />
-
-// Scripts with path handling
-<Script src="/scripts/analytics.js" strategy="afterInteractive" />
+// Programmatic navigation
+const router = useRouter();
+router.push("/contact");
 ```
 
-### Hook Examples
+### Assets
+
 ```tsx
-import { useAssetPath, useRouter, useAsset } from "next-pathkit/hooks";
+import { Image, useAssetPath } from "@hieupth/next-static-path";
 
-function Gallery() {
-  const { getPaths, getCssUrl, resolvePath } = useAssetPath();
-  const router = useRouter();
-  const heroImage = useAsset('/hero.jpg');
+// Auto-prefixes image paths
+<Image src="/logo.png" alt="Logo" width={180} height={38} />
 
-  const images = getPaths(['/img1.jpg', '/img2.jpg']);
-  const bgStyle = { backgroundImage: getCssUrl('/pattern.svg') };
-
-  return (
-    <div style={bgStyle}>
-      <img src={heroImage} alt="Hero" />
-      {images.map(src => <img key={src} src={src} />)}
-      <button onClick={() => router.push('/gallery')}>
-        View Gallery
-      </button>
-    </div>
-  );
-}
+// CSS background images
+const { getCssUrl } = useAssetPath();
+const style = { backgroundImage: getCssUrl('/bg.jpg') };
 ```
 
-### CSS-in-JS Support
+### Media Components
+
 ```tsx
-import { css, useProcessedCss } from "next-pathkit/utils/css";
+import { Audio, Video, Script, Iframe } from "@hieupth/next-static-path";
 
-// Template literal tag
-const styles = css`
-  background: url('/images/bg.jpg');
-  content: url('/icons/star.svg');
-`;
-
-// Hook for dynamic CSS
-function Component() {
-  const processedCss = useProcessedCss(`
-    background-image: url('/dynamic-bg.jpg');
-  `);
-
-  return <div style={{ css: processedCss }}>Content</div>;
-}
+<Audio src="/audio.mp3" controls />
+<Video src="/video.mp4" poster="/thumb.jpg" controls />
+<Script src="/analytics.js" />
+<Iframe src="/embed.html" width="600" height="400" />
 ```
 
-### Utility Functions
+### Utilities
+
 ```tsx
-import { getPrefixPath, getPrefixCssUrl, getPrefixUrlObject } from "next-pathkit";
+import {
+  getBasePath,
+  getPrefixPath,
+  getLocalePath,
+  parseLocaleFromPath
+} from "@hieupth/next-static-path";
 
-// Path prefixing
-const imagePath = getPrefixPath('/assets/logo.png');
-
-// CSS URL processing
-const css = getPrefixCssUrl('background: url("/images/bg.jpg")');
-
-// URL object handling
-const urlObj = getPrefixUrlObject({
-  pathname: '/dashboard',
-  query: { id: '123' }
-});
+const basePath = getBasePath(); // "/repo-name"
+const path = getPrefixPath('/assets/image.png'); // "/repo-name/assets/image.png"
+const localePath = getLocalePath('/about', 'vi'); // "/repo-name/vi/about"
+const { path, locale } = parseLocaleFromPath('/repo-name/vi/about');
 ```
 
-## 🎯 Use Cases
+## API
 
-- **GitHub Pages hosting** - Deploy Next.js static exports to sub-directories
-- **Multi-tenant applications** - Different basePath for different customers
-- **CDN deployments** - Assets served from different domains/paths
-- **CSS-in-JS integration** - Automatic basePath handling in styled components
-- **Dynamic asset loading** - Runtime asset path resolution
-- **API calls from static sites** - Proper endpoint path resolution
+### Components
+- `Link` - Enhanced Next.js Link with basePath + locale
+- `Image` - Enhanced Next.js Image with basePath
+- `Script`, `Audio`, `Video`, `Iframe` - Media components with path handling
+- `Form`, `Anchor`, `Bg`, `Source` - Additional utility components
+
+### Hooks
+- `useRouter()` - Enhanced router with automatic path handling
+- `useLocale()` - Locale detection and switching
+- `usePathname()` - Clean pathname without basePath
+- `useAssetPath()` - Asset path management
+
+### Utilities
+- `getBasePath()`, `getPrefixPath()` - Base path utilities
+- `getLocalePath()`, `parseLocaleFromPath()` - Locale utilities
+- `getPrefixCssUrl()` - CSS processing
+
+## Development
+
+```bash
+# Build library
+npm run build
+
+# Run examples
+cd examples/next-intl-example
+npm install
+npm run dev
+```
+
+## Contributing
+
+Contributions welcome! Please feel free to submit a Pull Request.
 
 ## License
 

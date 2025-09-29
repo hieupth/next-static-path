@@ -1,8 +1,8 @@
 {
-  "name": "next-pathkit",
+  "name": "@hieupth/next-static-path",
   "version": "0.0.1",
   "description": "Comprehensive toolkit for Next.js path management in static exports.",
-  "homepage": "https://github.com/hieupth/next-pathkit#readme",
+  "homepage": "https://github.com/hieupth/next-static-path#readme",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,11 +20,11 @@
   "types": "./dist/index.d.ts",
   "files": ["dist"],
   "bugs": {
-    "url": "https://github.com/hieupth/next-pathkit/issues"
+    "url": "https://github.com/hieupth/next-static-path/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hieupth/next-pathkit.git"
+    "url": "git+https://github.com/hieupth/next-static-path.git"
   },
   "license": "AGPL-3.0",
   "publishConfig": { "access": "public" },
